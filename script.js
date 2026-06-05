@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (loginBtn) {
         loginBtn.addEventListener("click", () => {
             // Usunięto %2F z samego końca parametru redirect_uri
-            window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=token&scope=identify&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl";
+            window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=code&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl%2F&scope=identify";
         });
     }
 
