@@ -213,13 +213,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Logowanie Discord (OAuth2)
     const loginBtn = document.getElementById("discord-login-btn");
     if (loginBtn) {
         loginBtn.addEventListener("click", () => {
-            // Wpisujemy sztywny adres URL, zakodowany dokładnie pod ustawienia bazy i Discorda
-            const redirectUri = encodeURIComponent("https://klik.info-atlas.pl/");
-            window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=code&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl.&scope=identify";
+            // Usunięto %2F z samego końca parametru redirect_uri
+            window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=token&scope=identify&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl";
         });
     }
 
