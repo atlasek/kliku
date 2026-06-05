@@ -47,17 +47,26 @@ updateLanguageUI();
    AUTORYZACJA DISCORD (DLA GRACZY VIA OAUTH2)
    ========================================================================== */
 function checkDiscordAuth() {
-    // Pobieramy parametry po znaku '#' (Implicit Grant zwraca dane w hash)
+    // 1. Sprawdzamy parametry po znaku '#' (Implicit Grant)
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
     let accessToken = hashParams.get("access_token");
+
+    // 2. Sprawdzamy parametry po znaku '?' na wypadek awaryjnego kodu
+    const queryParams = new URLSearchParams(window.location.search);
+    const authCode = queryParams.get("code");
 
     if (accessToken) {
         // Zapisujemy otrzymany token w przeglądarce gracza
         localStorage.setItem("discord_clicker_token", accessToken);
         // Bezpieczne czyszczenie paska adresu z tokenu bez przeładowania routingu Netlify
         window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
+    } else if (authCode) {
+        // Jeśli system wymusił kod zamiast tokenu, przekierowujemy go automatycznie na czysty token
+        localStorage.removeItem("discord_clicker_token");
+        window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=token&scope=identify&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl%2F";
+        return;
     } else {
-        // Jeśli nie ma w URL, sprawdzamy czy gracz był już zalogowany wcześniej
+        // Jeśli nie ma nic w URL, sprawdzamy czy gracz był już zalogowany wcześniej
         accessToken = localStorage.getItem("discord_clicker_token");
     }
 
@@ -190,7 +199,7 @@ function renderGameUI() {
     if (cost2El) cost2El.textContent = cost2;
     if (count2El) count2El.textContent = owned2;
 
-    // Renderowanie cen i poziomów dla wersji PL (DODANE!)
+    // Renderowanie cen i poziomów dla wersji PL
     if (cost1PlEl) cost1PlEl.textContent = cost1;
     if (count1PlEl) count1PlEl.textContent = owned1;
     if (cost2PlEl) cost2PlEl.textContent = cost2;
@@ -213,11 +222,11 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Przycisk logowania ze sztywnym, poprawnym linkiem Token OAuth2
     const loginBtn = document.getElementById("discord-login-btn");
     if (loginBtn) {
         loginBtn.addEventListener("click", () => {
-            // Usunięto %2F z samego końca parametru redirect_uri
-            window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=code&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl%2F&scope=identify";
+            window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=token&scope=identify&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl%2F";
         });
     }
 
