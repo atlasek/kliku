@@ -159,10 +159,17 @@ function renderGameUI() {
     const scoreDisplay = document.getElementById("score-display");
     const cpsDisplay = document.getElementById("cps-display");
     
+    // Elementy sklepu dla wersji EN
     const cost1El = document.getElementById("upgrade-1-cost");
     const count1El = document.getElementById("upgrade-1-count");
     const cost2El = document.getElementById("upgrade-2-cost");
     const count2El = document.getElementById("upgrade-2-count");
+
+    // Elementy sklepu dla wersji PL
+    const cost1PlEl = document.getElementById("upgrade-1-cost-pl");
+    const count1PlEl = document.getElementById("upgrade-1-count-pl");
+    const cost2PlEl = document.getElementById("upgrade-2-cost-pl");
+    const count2PlEl = document.getElementById("upgrade-2-count-pl");
 
     if (scoreDisplay) scoreDisplay.textContent = playerData.clicks;
     if (cpsDisplay) cpsDisplay.textContent = playerData.autoClickers;
@@ -170,11 +177,20 @@ function renderGameUI() {
     // Obliczanie aktualnej ceny na podstawie poziomu ulepszenia
     const cost1 = getUpgradeCost(10, playerData.clickPower - 1);
     const cost2 = getUpgradeCost(50, playerData.autoClickers);
+    const owned1 = playerData.clickPower - 1;
+    const owned2 = playerData.autoClickers;
 
+    // Renderowanie cen i poziomów dla wersji EN
     if (cost1El) cost1El.textContent = cost1;
-    if (count1El) count1El.textContent = playerData.clickPower - 1;
+    if (count1El) count1El.textContent = owned1;
     if (cost2El) cost2El.textContent = cost2;
-    if (count2El) count2El.textContent = playerData.autoClickers;
+    if (count2El) count2El.textContent = owned2;
+
+    // Renderowanie cen i poziomów dla wersji PL (DODANE!)
+    if (cost1PlEl) cost1PlEl.textContent = cost1;
+    if (count1PlEl) count1PlEl.textContent = owned1;
+    if (cost2PlEl) cost2PlEl.textContent = cost2;
+    if (count2PlEl) count2PlEl.textContent = owned2;
 }
 
 /* ==========================================================================
@@ -194,10 +210,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Logowanie Discord (OAuth2)
+   // Logowanie Discord (OAuth2)
     const loginBtn = document.getElementById("discord-login-btn");
     if (loginBtn) {
         loginBtn.addEventListener("click", () => {
-            const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
+            // Wpisujemy Twój adres na sztywno, bez kombinowania z window.location
+            const redirectUri = encodeURIComponent("https://klik.info-atlas.pl/");
+            
             window.location.href = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify`;
         });
     }
