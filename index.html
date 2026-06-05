@@ -1,458 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>atlas</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="zdjecia/atlasik.png">
-    <link rel="preload" href="zdjecia/foxgif.gif" as="image">
+    <title>Atlas Clicker 🎮</title>
+    <link rel="stylesheet" href="styl.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 </head>
-<body>
+<body class="lang-en">
 
-    <header>
-        <nav>
-            <ul>
-                <li>
-                    <button id="lang-mode-btn" class="lang-toggle">
-                        <span class="lang-icon">🌐</span>
-                        <span class="lang-text" data-lang="en">PL</span>
-                        <span class="lang-text" data-lang="pl">EN</span>
-                    </button>
-                </li>
-                <li>
-                    <a href="#" class="nav-link active" data-target="main-page">
-                        <span data-lang="en">Main Page</span>
-                        <span data-lang="pl">Strona Główna</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link" data-target="music-page">
-                        <span data-lang="en">Music</span>
-                        <span data-lang="pl">Muzyka</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link" data-target="links-page">
-                        <span data-lang="en">Links</span>
-                        <span data-lang="pl">Linki</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="nav-link">
-                        <span data-lang="en">Game 🎮</span>
-                        <span data-lang="pl">Gra 🎮</span>
-                    </a>
-                </li>
-                <li>
-                    <button id="dark-mode-btn" class="dark-mode-toggle">
-                        <span class="mode-icon">🌙</span>
-                        <span class="mode-text">Dark Mode</span>
-                    </button>
-                </li>
-            </ul>
-        </nav>
-    </header>
+    <div class="game-container">
+        
+        <div id="login-view" class="view-box">
+            <h2>
+                <span data-lang="en">Welcome to Atlas Clicker! 🐾</span>
+                <span data-lang="pl">Witaj w Atlas Clicker! 🐾</span>
+            </h2>
+            <p>
+                <span data-lang="en">Before you start clicking and upgrading, you need to sign in.</span>
+                <span data-lang="pl">Zanim zaczniesz klikać i kupować ulepszenia, musisz się zalogować.</span>
+            </p>
+            
+            <button id="discord-login-btn" class="discord-btn">
+                <span data-lang="en">Login with Discord</span>
+                <span data-lang="pl">Zaloguj przez Discorda</span>
+            </button>
 
-    <main>
-        <div id="main-page" class="page-content active">
-            <div class="main-layout">
-                
-                <section class="profile-section">
-                    <div class="profile-card">
-                        <div class="avatar-placeholder">
-                            <img src="zdjecia/darkgreenatlas.png" alt="Avatar">
-                            <span class="avatar-status" id="avatar-emoji">
-                                <span data-lang="en">click me ^^</span>
-                                <span data-lang="pl">kliknij mnie ^^</span>
-                            </span>
-                        </div>
-                        <h3>Hewwo!</h3>
-                        <p class="profile-subtitle" id="welcome-text">Welcome to my page :3</p>
-                        
-                        <div class="local-time-container">
-                            <span data-lang="en" class="en-time">
-                                local time: <span id="my-local-time">Loading...</span>
-                            </span>
-                            <span data-lang="pl" class="pl-time">
-                                lokalny czas: <span id="my-local-time-pl">Ładowanie...</span>
-                            </span>
-                        </div>
-                        
-                        <p class="click-counter-text">🐾 
-                            <span data-lang="en">Petted: <span id="click-counter">0</span> times</span>
-                            <span data-lang="pl">Pogłaskany: <span id="click-counter-pl">0</span> razy</span>
-                        </p>
-                        <hr class="profile-divider">
-                        <p class="dm-status">💬 
-                            <span data-lang="en">My DMs are open!</span>
-                            <span data-lang="pl">DM otwarte!</span>
-                        </p>
-                        <a href="https://discord.com/users/1141855840761036840" class="contact-btn">
-                            <span data-lang="en">Contact me</span>
-                            <span data-lang="pl">Napisz do mnie</span>
-                        </a>
-                        
-                        <div id="discord-game-box" class="discord-widget" style="display: none;">
-                            <div class="discord-header">
-                                <span class="discord-title" data-lang="en">CURRENTLY</span>
-                                <span class="discord-title" data-lang="pl">AKTUALNIE</span>
-                                <div class="discord-dots">🦊</div>
-                            </div>
-                            <div class="discord-body">
-                                <div class="discord-assets">
-                                    <img id="discord-game-cover" src="" alt="Game Icon" class="discord-large-img">
-                                    <img id="discord-game-small-img" src="" alt="Status Icon" class="discord-small-img" style="display: none;">
-                                </div>
-                                <div class="discord-details">
-                                    <div id="discord-game-title" class="discord-game-name"></div>
-                                    <div id="discord-game-details" class="discord-game-details"></div>
-                                    <div id="discord-game-state" class="discord-game-state"></div>
-                                    <div class="discord-game-time">
-                                        <span class="controller-icon">
-
-                                        </span> <span id="discord-game-timer">Active</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="discord-spotify-card" class="discord-widget" style="display: none; margin-top: 10px;">
-                            <div class="discord-header">
-                                <span class="discord-title" data-lang="en">LISTENING TO SPOTIFY</span>
-                                <span class="discord-title" data-lang="pl">SŁUCHA SPOTIFY</span>
-                                <div class="discord-dots">🦊</div>
-                            </div>
-                            <div class="discord-body">
-                                <div class="discord-assets">
-                                    <img id="discord-spotify-img" src="" alt="Album Art" class="discord-large-img" style="border-radius: 8px;">
-                                </div>
-                                <div class="discord-details">
-                                    <div id="discord-spotify-song" class="discord-game-name" style="color: #1db954;"></div>
-                                    <div id="discord-spotify-artist" class="discord-game-details"></div>
-                                    <div id="discord-spotify-album" class="discord-game-state" style="font-style: italic; opacity: 0.7;"></div>
-                                    <div class="discord-game-time">
-                                        <span class="controller-icon">🎵</span> <span id="discord-spotify-timer">Playing</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="about-section">
-                    <h2>
-                        <span data-lang="en">About me</span>
-                        <span data-lang="pl">O mnie</span>
-                    </h2>
-                    <p class="about-intro">
-                        <span data-lang="en"><strong>🌿 Hi! </strong>I'm <span id="live-age">calculating...</span> old living in Poland with Lithuanian roots. <br>I just love mixing my technical side with creative hobbies, whether it's coding, gaming, or vibing to music.</span>
-                        <span data-lang="pl"><strong>🌿 Hej! </strong>Mam <span id="live-age-pl">obliczam...</span>, mieszkam w Polsce i mam litewskie korzenie. <br>Uwielbiam łączyć swoją techniczną stronę z kreatywnymi zainteresowaniami, nieważne czy to kodowanie, granie, czy słuchanie muzyki.</span>
-                    </p>
-                    <ul class="interests-container">
-                        <li class="interest-item">
-                            <div class="interest-text">
-                                <span data-lang="en"><strong>💻 Tech:</strong> Currently learning programming.</span>
-                                <span data-lang="pl"><strong>💻 Tech:</strong> Obecnie uczę się programowania.</span>
-                            </div>
-                        </li>
-                        <li class="interest-item">
-                            <div class="interest-text">
-                                <span data-lang="en"><strong>🎮 Gaming:</strong> Passionate about osu! and Minecraft.</span>
-                                <span data-lang="pl"><strong>🎮 Gry:</strong> Moje ulubione gry to osu! oraz Minecraft.</span>
-                            </div>
-                        </li>
-                        <li class="interest-item">
-                            <div class="interest-text">
-                                <span data-lang="en"><strong>🎵 Leisure:</strong> Big fan of music and always happy to help people out. :3</span>
-                                <span data-lang="pl"><strong>🎵 Czas wolny:</strong> Uwielbiam muzykę i zawsze jestem chętny do pomocy. :3</span>
-                            </div>
-                        </li>
-                    </ul>
-
-                    <h3>
-                        <span data-lang="en">🗣️ Languages</span>
-                        <span data-lang="pl">🗣️ Języki</span>
-                    </h3>
-                    <ul class="lang-container">
-                        <li class="lang-badge fluent">
-                            <span data-lang="en"><strong>Fluent:</strong> Polish 🇵🇱, English 🇬🇧</span>
-                            <span data-lang="pl"><strong>Dosyć płynnie:</strong> Polski 🇵🇱, Angielski 🇬🇧</span>
-                        </li>
-                        <li class="lang-badge basics">
-                            <span data-lang="en"><strong>Basics:</strong> Swedish 🇸🇪, Lithuanian 🇱🇹</span>
-                            <span data-lang="pl"><strong>Podstawy:</strong> Szwedzki 🇸🇪, Litewski 🇱🇹</span>
-                        </li>
-                        <li class="lang-badge learning">
-                            <span data-lang="en"><strong>Learning:</strong> French 🇫🇷, Russian 🇷🇺</span>
-                            <span data-lang="pl"><strong>Uczę się:</strong> Francuskiego 🇫🇷, Rosyjskiego 🇷🇺</span>
-                        </li>
-                    </ul>
-                </section>
-
-                <section class="comments-section">
-                    <h2>
-                        <span data-lang="en">Leave a Message! 📝</span>
-                        <span data-lang="pl">Zostaw komentarz! 📝</span>
-                    </h2>
-                    
-                    <div id="admin-badge-status" class="admin-status-notification" style="display: none;">
-                        👑 Admin Mode Active (Logged via Discord) <button id="admin-logout-btn">Logout</button>
-                    </div>
-
-                    <div class="comment-box-container">
-                        <form id="comment-form">
-                            <div class="input-wrapper">
-                                <span data-lang="en"><input type="text" id="comment-nickname" placeholder="Your nickname..." required maxlength="20"></span>
-                                <span data-lang="pl"><input type="text" id="comment-nickname-pl" placeholder="Twój nick..." maxlength="20"></span>
-                            </div>
-
-                            <div class="input-wrapper">
-                                <span data-lang="en"><textarea id="comment-text" placeholder="Leave a sweet message... :3" required maxlength="250"></textarea></span>
-                                <span data-lang="pl"><textarea id="comment-text-pl" placeholder="Zostaw miłą wiadomość... :3" maxlength="250"></textarea></span>
-                            </div>
-                            
-                            <div class="captcha-wrapper">
-                                <span data-lang="en">Security check: <span id="captcha-question">Loading...</span></span>
-                                <span data-lang="pl">Weryfikacja: <span id="captcha-question-pl">Ładowanie...</span></span>
-                                <input type="number" id="comment-captcha" placeholder="Result..." required>
-                            </div>
-
-                            <button type="submit" class="send-comment-btn">
-                                <span data-lang="en">Send message 🐾</span>
-                                <span data-lang="pl">Wyślij wiadomość 🐾</span>
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="comments-filter-wrapper">
-                        <label for="comments-sort" data-lang="en">Sort by:</label>
-                        <label for="comments-sort" data-lang="pl">Sortuj według:</label>
-                        
-                        <select id="comments-sort">
-                            <option value="newest" data-lang="en">Newest</option>
-                            <option value="popular" data-lang="en">Most Liked</option>
-                            
-                            <option value="newest" data-lang="pl">Najnowsze</option>
-                            <option value="popular" data-lang="pl">Najbardziej lubiane</option>
-                        </select>
-                    </div>
-
-                    <div id="comments-list" class="comments-list">
-                        <div class="loading-comments" data-lang="en">Loading messages...</div>
-                        <div class="loading-comments" data-lang="pl">Ładowanie wiadomości...</div>
-                    </div>
-
-                    <div class="backup-wrapper">
-                        <button id="backup-btn" class="backup-btn" style="display: none;">
-                            <span data-lang="en">💾 Export Guestbook Backup (JSON)</span>
-                            <span data-lang="pl">💾 Eksportuj kopię zapasową (JSON)</span>
-                        </button>
-                    </div>
-                </section>
-
+            <div class="safety-info">
+                <h4>
+                    <span data-lang="en">🔒 Is this safe?</span>
+                    <span data-lang="pl">🔒 Czy to jest bezpieczne?</span>
+                </h4>
+                <p>
+                    <span data-lang="en">Yes! Authentication is handled directly by Discord. This site <strong>never sees your password</strong>. We only use your public username and avatar to save your game progress</span>
+                    <span data-lang="pl">Tak! Logowanie odbywa się bezpośrednio przez oficjalny system Discorda. Ta strona <strong>nigdy nie pozna Twojego hasła</strong>. Pobieramy jedynie Twój publiczny nick oraz awatar, aby zapisać Twój postęp gry</span>
+                </p>
             </div>
         </div>
 
-        <div id="music-page" class="page-content">
-            <section class="about-section">
-                <div class="music-header-container">
-                    <h2>
-                        <span data-lang="en">Music 🎵</span>
-                        <span data-lang="pl">Muzyka 🎵</span>
-                    </h2>
-                    <a href="https://spotify.com" target="_blank" class="spotify-profile-btn">
-                        <svg class="spotify-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.494 17.307c-.217.356-.684.47-1.04.252-2.875-1.756-6.495-2.155-10.757-1.18-.406.092-.813-.16-.906-.565-.092-.405.16-.813.565-.906 4.665-1.066 8.647-.614 11.88 1.36.357.218.47.684.252 1.04zm1.468-3.26c-.274.444-.853.59-1.296.317-3.29-2.023-8.307-2.61-12.196-1.428-.496.15-1.02-.128-1.17-.624-.15-.497.128-1.02.624-1.17 4.443-1.348 9.97-.694 13.722 1.614.443.273.59.852.316 1.296zm.126-3.41c-3.945-2.343-10.453-2.56-14.223-1.415-.606.184-1.246-.153-1.43-.76-.184-.607.153-1.247.76-1.43 4.33-1.314 11.512-1.054 16.035 1.63.546.324.726 1.033.402 1.58-.324.545-1.033.725-1.58.402z" fill="currentColor"/></svg>
-                        <span data-lang="en">My Profile</span>
-                        <span data-lang="pl">Mój profil</span>
-                    </a>
+        <div id="game-view" class="view-box" style="display: none;">
+            <div class="player-header">
+                <div class="user-info">
+                    <img id="user-avatar" src="" alt="Avatar">
+                    <span id="user-name">...</span>
                 </div>
+                <button id="logout-btn" class="logout-link">
+                    <span data-lang="en">Logout</span>
+                    <span data-lang="pl">Wyloguj</span>
+                </button>
+            </div>
 
-                <div class="music-top-row">
-                    <p class="about-intro music-intro">
-                        <span data-lang="en">A little look into my daily soundtrack and the tracks I love the most. ✨</span>
-                        <span data-lang="pl">Moje ulubione utwory, artyści oraz playlisty których słucham najwięcej ✨</span>
-                    </p>
-                    
-                    <a href="#" target="_blank" id="track-link" class="now-playing-link-wrapper">
-                        <div class="now-playing-container">
-                            <div class="now-playing-status" id="spotify-status-badge">
-                                <span class="status-dot offline"></span> <span id="spotify-status-text">OFFLINE</span>
-                            </div>
-                            <div class="now-playing-card">
-                                <div class="track-cover-wrapper">
-                                    <img src="zdjecia/atlasik.png" id="track-cover" alt="Track cover">
-                                </div>
-                                <div class="track-info">
-                                    <div id="track-title" class="track-title">Not listening to anything right now</div>
-                                    <div id="track-artist" class="track-artist">Shhhhh... 💤</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="music-columns-container">
-                    <div class="music-column">
-                        <h3>
-                            <span data-lang="en">Favorite Tracks</span>
-                            <span data-lang="pl">Ulubione utwory</span>
-                        </h3>
-                        <div class="fav-tracks-list">
-                            <a href="https://open.spotify.com/track/3oNQ6NkihVzQkV5qhk2Pbe" target="_blank" class="fav-track-item">
-                                <img src="zdjecia/sau.jpg" alt="Cover" class="fav-track-cover">
-                                <div class="fav-track-info">
-                                    <span class="fav-track-title">something about you</span>
-                                    <span class="fav-track-artist">Eyedress,Dent May</span>
-                                </div>
-                            </a>
-                            <a href="https://open.spotify.com/track/6G9YlbU3ByPJQvOFDRdwyM" target="_blank" class="fav-track-item">
-                                <img src="zdjecia/herjvke.jpg" alt="Cover" class="fav-track-cover">
-                                <div class="fav-track-info">
-                                    <span class="fav-track-title">her</span>
-                                    <span class="fav-track-artist">JVKE</span>
-                                </div>
-                            </a>
-                            <a href="https://open.spotify.com/track/7K59Lt75PBN9VISevo3eYC" target="_blank" class="fav-track-item">
-                                <img src="zdjecia/athyaelokre.jpg" alt="Cover" class="fav-track-cover">
-                                <div class="fav-track-info">
-                                    <span class="fav-track-title">And the Hound</span>
-                                    <span class="fav-track-artist">Yaelokre</span>
-                                </div>
-                            </a>
-                             <a href="https://open.spotify.com/track/3iBPwcI3DU141SziblSBri" target="_blank" class="fav-track-item">
-                                <img src="zdjecia/заклятый_враг.jpg" alt="Cover" class="fav-track-cover">
-                                <div class="fav-track-info">
-                                    <span class="fav-track-title">заклятый враг</span>
-                                    <span class="fav-track-artist">zhanulka</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="music-column">
-                        <h3>
-                            <span data-lang="en">Favorite Artists</span>
-                            <span data-lang="pl">Ulubieni wykonawcy</span>
-                        </h3>
-                        <div class="fav-artists-grid">
-                            <a href="https://open.spotify.com/artist/3rRyfgGByetsaaujkjQ7rY" target="_blank" class="fav-artist-item">
-                                <div class="fav-artist-img-wrapper">
-                                    <img src="zdjecia/yaelokre.jpg" alt="Artist">
-                                </div>
-                                <span class="fav-artist-name">Yaelokre</span>
-                            </a>
-                            <a href="https://open.spotify.com/artist/7Ln80lUS6He07XvHI8qqHH" target="_blank" class="fav-artist-item">
-                                <div class="fav-artist-img-wrapper">
-                                    <img src="zdjecia/ArcticMonkeys.jpg" alt="Artist">
-                                </div>
-                                <span class="fav-artist-name">Arctic Monkeys</span>
-                            </a>
-                            <a href="https://open.spotify.com/artist/164Uj4eKjl6zTBKfJLFKKK" target="_blank" class="fav-artist-item">
-                                <div class="fav-artist-img-wrapper">
-                                    <img src="zdjecia/JVKE.jpg" alt="Artist">
-                                </div>
-                                <span class="fav-artist-name">JVKE</span>
-                            </a>
-                            <a href="https://open.spotify.com/artist/1Au0h7HpR2v5KzwdORR4Yz" target="_blank" class="fav-artist-item">
-                                <div class="fav-artist-img-wrapper">
-                                    <img src="zdjecia/modes.jpg" alt="Artist">
-                                </div>
-                                <span class="fav-artist-name">Mødès</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="music-albums-section">
-                    <h3>
-                        <span data-lang="en">Top Albums</span>
-                        <span data-lang="pl">Najlepsze albumy</span>
-                    </h3>
-                    <div class="albums-grid">
-                        <a href="https://open.spotify.com/playlist/7adM1ndWWDZI04gdb2gMfo" target="_blank" class="album-item">
-                            <img src="zdjecia/mreow3.jpg" alt="Album" class="album-cover">
-                            <span class="album-title">mreow :3</span>
-                            <span class="album-artist">des</span>
-                        </a>
-                        <a href="https://open.spotify.com/playlist/0c6ShMvVn27DELFOIVxHwW" target="_blank" class="album-item">
-                            <img src="zdjecia/summer20142015.jpg" alt="Album" class="album-cover">
-                            <span class="album-title">Summer 2014/2015</span>
-                            <span class="album-artist">ferrero.xz "</span>
-                        </a>
-                        <a href="https://open.spotify.com/playlist/5Bgt3TfosjXGKkrnVTL050" target="_blank" class="album-item">
-                            <img src="zdjecia/am.jpg" alt="Album" class="album-cover">
-                            <span class="album-title">Arctic monkeys 🎀</span>
-                            <span class="album-artist">sincerely_liv 🎀</span>
-                        </a>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <div id="links-page" class="page-content">
-            <section class="about-section">
-                <h1>
-                    <span data-lang="en">Links 🔗</span>
-                    <span data-lang="pl">Linki 🔗</span>
-                </h1>
+            <div class="clicker-section">
+                <h1 id="score-display">0</h1>
                 
-                <div class="links-container">
-                    <p class="links-subtitle">
-                        <span data-lang="en">U can find me here:</span>
-                        <span data-lang="pl">Tutaj mnie znajdziesz:</span>
-                    </p>
-                    
-                    <div class="links-grid">
-                        <a href="https://discord.com/users/1141855840761036840" target="_blank" class="link-item telegram">
-                            <span class="link-icon">🔓</span>
-                            <span class="link-text">Discord</span>
-                        </a>
-                        <a href="https://osu.ppy.sh/users/33034254" target="_blank" class="link-item tiktok">
-                            <span class="link-icon">🌸</span>
-                            <span class="link-text">osu! Profile</span>
-                        </a>
-                        <a href="https://steamcommunity.com/profiles/76561199403867242/" target="_blank" class="link-item steam">
-                            <span class="link-icon">🎮</span>
-                            <span class="link-text">Steam</span>
-                        </a>
-                        <a href="https://www.tiktok.com/@atumn_atum?_r=1&_t=ZN-96oq6H3eozu" target="_blank" class="link-item tiktok">
-                            <span class="link-icon">📱</span>
-                            <span class="link-text">TikTok</span>
-                        </a>
-                        <a href="https://t.me/me_atlas" target="_blank" class="link-item telegram">
-                            <span class="link-icon">✈️</span>
-                            <span class="link-text">Telegram</span>
-                        </a>
-                        <a href="https://youtube.com/@its__atlas?si=YHdykiVMGETK3BxM" target="_blank" class="link-item youtube">
-                            <span class="link-icon">📺</span>
-                            <span class="link-text">YouTube</span>
-                        </a>
-                        <a href="https://spotify.com" target="_blank" class="link-item pinterest">
-                            <span class="link-icon">🎵</span>
-                            <span class="link-text">Spotify</span>
-                        </a>
-                        <div class="link-item discord coming-soon">
-                            <span class="link-icon">💬</span>
-                            <span class="link-text">
-                                <span data-lang="en">Discord Server <small>(Soon)</small></span>
-                                <span data-lang="pl">Serwer Discord <small>(Wkrótce)</small></span>
-                            </span>
-                        </div>
+                <div class="clickable-target" id="game-click-target">
+                    <img src="https://info-atlas.pl/favicon.png" alt="Click!">
+                </div>
+                
+                <p class="cps-text">
+                    <span data-lang="en">Income:</span>
+                    <span data-lang="pl">Zyskujesz:</span>
+                    <strong id="cps-display">0</strong> 
+                    <span data-lang="en">points/sec</span>
+                    <span data-lang="pl">punktów/sek</span>
+                </p>
+            </div>
+
+            <div class="shop-section">
+                <h3>
+                    <span data-lang="en">Upgrades Shop 🛒</span>
+                    <span data-lang="pl">Sklep z ulepszeniami 🛒</span>
+                </h3>
+                
+                <div class="shop-item" id="buy-click-power">
+                    <button>
+                        <span data-lang="en">Stronger Click (+1)</span>
+                        <span data-lang="pl">Silniejszy Klik (+1)</span>
+                        <br>
+                        <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-1-cost">10</span>
+                    </button>
+                    <div class="item-count">
+                        <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-1-count">0</span>
                     </div>
                 </div>
-            </section>
-        </div>
-    </main>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+                <div class="shop-item" id="buy-auto-clicker">
+                    <button>
+                        <span data-lang="en">Auto-Clicker (+1/s)</span>
+                        <span data-lang="pl">Automatyczny Klikacz (+1/s)</span>
+                        <br>
+                        <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-2-cost">50</span>
+                    </button>
+                    <div class="item-count">
+                        <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-2-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="footer-divider">
+        <div class="game-footer">
+            <button id="game-lang-btn" class="mini-lang-btn">🌐 PL / EN</button>
+        </div>
+
+    </div>
+
     <script src="script.js"></script>
-
-    <footer>
-        <div class="footer-content" id="secret-footer-trigger">
-            © 2026 by atlas. All rights reserved.
-        </div>
-    </footer>
 </body>
 </html>
