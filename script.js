@@ -47,13 +47,17 @@ updateLanguageUI();
    AUTORYZACJA DISCORD (DLA GRACZY VIA OAUTH2)
    ========================================================================== */
 function checkDiscordAuth() {
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    let accessToken = fragment.get("access_token");
+    // Pobieramy parametry po znaku '#' (Implicit Grant zwraca dane w hash)
+    const hashParams = new URLSearchParams(window.location.hash.slice(1));
+    let accessToken = hashParams.get("access_token");
 
     if (accessToken) {
+        // Zapisujemy otrzymany token w przeglądarce gracza
         localStorage.setItem("discord_clicker_token", accessToken);
-        window.history.replaceState({}, document.title, window.location.pathname); // Czyszczenie paska adresu z tokenu
+        // Bezpieczne czyszczenie paska adresu z tokenu bez przeładowania routingu Netlify
+        window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
     } else {
+        // Jeśli nie ma w URL, sprawdzamy czy gracz był już zalogowany wcześniej
         accessToken = localStorage.getItem("discord_clicker_token");
     }
 
@@ -210,13 +214,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Logowanie Discord (OAuth2)
-   // Logowanie Discord (OAuth2)
     const loginBtn = document.getElementById("discord-login-btn");
     if (loginBtn) {
         loginBtn.addEventListener("click", () => {
-            // Wpisujemy Twój adres na sztywno, bez kombinowania z window.location
+            // Wpisujemy sztywny adres URL, zakodowany dokładnie pod ustawienia bazy i Discorda
             const redirectUri = encodeURIComponent("https://klik.info-atlas.pl/");
-            
             window.location.href = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify`;
         });
     }
@@ -260,7 +262,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (playerData.clicks >= cost) {
                 userRef.transaction((currentData) => {
                     if (currentData) {
-                        // Ponowne sprawdzenie wewnątrz transakcji, czy na pewno stać gracza
                         const actualCost = getUpgradeCost(10, (currentData.clickPower || 1) - 1);
                         if ((currentData.clicks || 0) >= actualCost) {
                             currentData.clicks -= actualCost;
