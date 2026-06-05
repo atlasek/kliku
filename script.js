@@ -219,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
         loginBtn.addEventListener("click", () => {
             // Wpisujemy sztywny adres URL, zakodowany dokładnie pod ustawienia bazy i Discorda
             const redirectUri = encodeURIComponent("https://klik.info-atlas.pl/");
-            window.location.href = `https://discord.com/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=identify`;
+            window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=code&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl.&scope=identify";
         });
     }
 
