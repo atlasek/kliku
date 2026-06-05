@@ -47,26 +47,20 @@ updateLanguageUI();
    AUTORYZACJA DISCORD (DLA GRACZY VIA OAUTH2)
    ========================================================================== */
 function checkDiscordAuth() {
-    // 1. Sprawdzamy parametry po znaku '#' (Implicit Grant)
     const hashParams = new URLSearchParams(window.location.hash.slice(1));
     let accessToken = hashParams.get("access_token");
 
-    // 2. Sprawdzamy parametry po znaku '?' na wypadek awaryjnego kodu
     const queryParams = new URLSearchParams(window.location.search);
     const authCode = queryParams.get("code");
 
     if (accessToken) {
-        // Zapisujemy otrzymany token w przeglądarce gracza
         localStorage.setItem("discord_clicker_token", accessToken);
-        // Bezpieczne czyszczenie paska adresu z tokenu bez przeładowania routingu Netlify
         window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
     } else if (authCode) {
-        // Jeśli system wymusił kod zamiast tokenu, przekierowujemy go automatycznie na czysty token
         localStorage.removeItem("discord_clicker_token");
         window.location.href = "https://discord.com/oauth2/authorize?client_id=1510567895212494930&response_type=token&scope=identify&redirect_uri=https%3A%2F%2Fklik.info-atlas.pl%2F";
         return;
     } else {
-        // Jeśli nie ma nic w URL, sprawdzamy czy gracz był już zalogowany wcześniej
         accessToken = localStorage.getItem("discord_clicker_token");
     }
 
@@ -87,10 +81,8 @@ function fetchDiscordUserData(token) {
     })
     .then(data => {
         userId = data.id;
-        // Zapisujemy graczy w osobnym węźle w tej samej bazie danych
         userRef = db.ref("clicker_players/" + userId);
         
-        // Aktualizacja podstawowych danych profilowych gracza w bazie
         userRef.child("profile").set({
             username: data.username,
             avatar: data.avatar ? `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png` : "https://cdn.discordapp.com/embed/avatars/0.png"
@@ -123,6 +115,12 @@ function showView(viewId) {
         if (viewId === "game-view") {
             loginView.style.display = "none";
             gameView.style.display = "block";
+            
+            // POPRAWKA: Wymuszamy załadowanie pierwszego liska PNG na start gry, zaraz po zalogowaniu
+            const clickTarget = document.getElementById("game-click-target");
+            if (clickTarget) {
+                clickTarget.src = "zdjecia/lisu1.png";
+            }
         } else {
             loginView.style.display = "block";
             gameView.style.display = "none";
@@ -134,7 +132,6 @@ function showView(viewId) {
    MECHANIKA GRY (ZAPIS I SYNCHRONIZACJA Z BAZĄ)
    ========================================================================== */
 function setupGameSync() {
-    // Słuchacz bazy w czasie rzeczywistym
     userRef.on("value", (snapshot) => {
         const data = snapshot.val();
         if (data) {
@@ -143,7 +140,6 @@ function setupGameSync() {
             playerData.autoClickers = data.autoClickers || 0;
             renderGameUI();
         } else {
-            // Pierwsze wejście nowego gracza do gry
             userRef.update({
                 clicks: 0,
                 clickPower: 1,
@@ -152,10 +148,8 @@ function setupGameSync() {
         }
     });
 
-    // Pętla Auto-Clickera działająca co sekundę
     setInterval(() => {
         if (playerData.autoClickers > 0 && userRef) {
-            // Używamy transakcji dla zachowania bezpieczeństwa punktów
             userRef.child("clicks").transaction((currentClicks) => {
                 return (currentClicks || 0) + playerData.autoClickers;
             });
@@ -163,7 +157,6 @@ function setupGameSync() {
     }, 1000);
 }
 
-// Matematyczny algorytm skalowania kosztów ulepszeń (cena rośnie o 15% co poziom)
 function getUpgradeCost(baseCost, count) {
     return Math.floor(baseCost * Math.pow(1.15, count));
 }
@@ -172,13 +165,11 @@ function renderGameUI() {
     const scoreDisplay = document.getElementById("score-display");
     const cpsDisplay = document.getElementById("cps-display");
     
-    // Elementy sklepu dla wersji EN
     const cost1El = document.getElementById("upgrade-1-cost");
     const count1El = document.getElementById("upgrade-1-count");
     const cost2El = document.getElementById("upgrade-2-cost");
     const count2El = document.getElementById("upgrade-2-count");
 
-    // Elementy sklepu dla wersji PL
     const cost1PlEl = document.getElementById("upgrade-1-cost-pl");
     const count1PlEl = document.getElementById("upgrade-1-count-pl");
     const cost2PlEl = document.getElementById("upgrade-2-cost-pl");
@@ -187,19 +178,16 @@ function renderGameUI() {
     if (scoreDisplay) scoreDisplay.textContent = playerData.clicks;
     if (cpsDisplay) cpsDisplay.textContent = playerData.autoClickers;
 
-    // Obliczanie aktualnej ceny na podstawie poziomu ulepszenia
     const cost1 = getUpgradeCost(10, playerData.clickPower - 1);
     const cost2 = getUpgradeCost(50, playerData.autoClickers);
     const owned1 = playerData.clickPower - 1;
     const owned2 = playerData.autoClickers;
 
-    // Renderowanie cen i poziomów dla wersji EN
     if (cost1El) cost1El.textContent = cost1;
     if (count1El) count1El.textContent = owned1;
     if (cost2El) cost2El.textContent = cost2;
     if (count2El) count2El.textContent = owned2;
 
-    // Renderowanie cen i poziomów dla wersji PL
     if (cost1PlEl) cost1PlEl.textContent = cost1;
     if (count1PlEl) count1PlEl.textContent = owned1;
     if (cost2PlEl) cost2PlEl.textContent = cost2;
@@ -212,7 +200,6 @@ function renderGameUI() {
 document.addEventListener("DOMContentLoaded", () => {
     checkDiscordAuth();
 
-    // Zmiana języka gry
     const langBtn = document.getElementById("game-lang-btn");
     if (langBtn) {
         langBtn.addEventListener("click", (e) => {
@@ -222,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Przycisk logowania ze sztywnym, poprawnym linkiem Token OAuth2
     const loginBtn = document.getElementById("discord-login-btn");
     if (loginBtn) {
         loginBtn.addEventListener("click", () => {
@@ -230,42 +216,37 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Wylogowanie z gry
     const logoutBtn = document.getElementById("logout-btn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
             localStorage.removeItem("discord_clicker_token");
-            if (userRef) userRef.off(); // Odpięcie nasłuchiwania bazy danych
+            if (userRef) userRef.off(); 
             window.location.reload();
         });
     }
 
-    // Klikanie w cel (Liska) - Zmiana grafiki przy kliknięciu + efekt spłaszczenia
+    // Klikanie w cel (Liska)
     const clickTarget = document.getElementById("game-click-target");
     if (clickTarget) {
         clickTarget.addEventListener("click", () => {
             if (!userRef) return;
             
-            // Bezpieczna inkrementacja klików w bazie Firebase
             userRef.child("clicks").transaction((currentClicks) => {
                 return (currentClicks || 0) + playerData.clickPower;
             });
             
-            // 1. Zmieniamy grafikę na liska po kliknięciu (otwarta buzia)
+            // Efekt kliknięcia – zmiana na otwartą buźkę PNG
             clickTarget.src = "zdjecia/lisu2.png"; 
-            
-            // 2. Dodajemy klasę CSS spłaszczającą obrazek
             clickTarget.classList.add("squish-effect");
             
-            // 3. Po 120ms wracamy do domyślnego liska i usuwamy efekt spłaszczenia
             setTimeout(() => {
-                clickTarget.src = "zdjecia/lisu1.png"; // Zdjęcie główne
+                clickTarget.src = "zdjecia/lisu1.png"; 
                 clickTarget.classList.remove("squish-effect");
             }, 120);
         });
     }
 
-    // SKLEP: Kupowanie siły kliknięcia (Upgrade 1) - Zabezpieczone transakcją
+    // SKLEP: Kupowanie siły kliknięcia (Upgrade 1)
     const buyClickPowerBtn = document.getElementById("buy-click-power");
     if (buyClickPowerBtn) {
         buyClickPowerBtn.addEventListener("click", () => {
@@ -289,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // SKLEP: Kupowanie Auto-Clickera (Upgrade 2) - Zabezpieczone transakcją
+    // SKLEP: Kupowanie Auto-Clickera (Upgrade 2)
     const buyAutoClickerBtn = document.getElementById("buy-auto-clicker");
     if (buyAutoClickerBtn) {
         buyAutoClickerBtn.addEventListener("click", () => {
