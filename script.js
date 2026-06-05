@@ -116,10 +116,10 @@ function showView(viewId) {
             loginView.style.display = "none";
             gameView.style.display = "block";
             
-            // POPRAWKA 1: Usunięto przedrostek "zdjecia/" przy ładowaniu widoku gry
+            // TWARDA ŚCIEŻKA: ./ wymusza szukanie w tym samym folderze
             const clickTarget = document.getElementById("game-click-target");
             if (clickTarget) {
-                clickTarget.src = "lisu1.png";
+                clickTarget.src = "./lisu1.png";
             }
         } else {
             loginView.style.display = "block";
@@ -235,12 +235,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 return (currentClicks || 0) + playerData.clickPower;
             });
             
-            // POPRAWKA 2 i 3: Zmiana obrazków liska na czyste ścieżki bez przedrostka "zdjecia/"
-            clickTarget.src = "lisu2.png"; 
+            // TWARDA ŚCIEŻKA: ./ wymusza szukanie w tym samym folderze
+            clickTarget.src = "./lisu2.png"; 
             clickTarget.classList.add("squish-effect");
             
             setTimeout(() => {
-                clickTarget.src = "lisu1.png"; 
+                clickTarget.src = "./lisu1.png"; 
                 clickTarget.classList.remove("squish-effect");
             }, 120);
         });
