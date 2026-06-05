@@ -252,14 +252,14 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             
             // 1. Zmieniamy grafikę na liska po kliknięciu (otwarta buzia)
-            clickTarget.src = "image_8b6b04.jpg"; 
+            clickTarget.src = "zdjecia/lisu2.png"; 
             
             // 2. Dodajemy klasę CSS spłaszczającą obrazek
             clickTarget.classList.add("squish-effect");
             
             // 3. Po 120ms wracamy do domyślnego liska i usuwamy efekt spłaszczenia
             setTimeout(() => {
-                clickTarget.src = "image_8b6ae9.jpg"; // Zdjęcie główne
+                clickTarget.src = "zdjecia/lisu1.png"; // Zdjęcie główne
                 clickTarget.classList.remove("squish-effect");
             }, 120);
         });
