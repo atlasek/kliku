@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas Clicker 🎮</title>
+    <link rel="stylesheet" href="styl.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+</head>
+<body class="lang-en">
+
+    <div class="game-container">
+        
+        <div id="login-view" class="view-box">
+            <h2>
+                <span data-lang="en">Welcome to Atlas Clicker! 🐾</span>
+                <span data-lang="pl">Witaj w Atlas Clicker! 🐾</span>
+            </h2>
+            <p>
+                <span data-lang="en">Before you start clicking and upgrading, you need to sign in.</span>
+                <span data-lang="pl">Zanim zaczniesz klikać i kupować ulepszenia, musisz się zalogować.</span>
+            </p>
+            
+            <button id="discord-login-btn" class="discord-btn">
+                <span data-lang="en">Login with Discord</span>
+                <span data-lang="pl">Zaloguj przez Discorda</span>
+            </button>
+
+            <div class="safety-info">
+                <h4>
+                    <span data-lang="en">🔒 Is this safe?</span>
+                    <span data-lang="pl">🔒 Czy to jest bezpieczne?</span>
+                </h4>
+                <p>
+                    <span data-lang="en">Yes! Authentication is handled directly by Discord. This site <strong>never sees your password</strong>. We only use your public username and avatar to save your game progress</span>
+                    <span data-lang="pl">Tak! Logowanie odbywa się bezpośrednio przez oficjalny system Discorda. Ta strona <strong>nigdy nie pozna Twojego hasła</strong>. Pobieramy jedynie Twój publiczny nick oraz awatar, aby zapisać Twój postęp gry</span>
+                </p>
+            </div>
+        </div>
+
+        <div id="game-view" class="view-box" style="display: none;">
+            <div class="player-header">
+                <div class="user-info">
+                    <img id="user-avatar" src="" alt="Avatar">
+                    <span id="user-name">...</span>
+                </div>
+                <button id="logout-btn" class="logout-link">
+                    <span data-lang="en">Logout</span>
+                    <span data-lang="pl">Wyloguj</span>
+                </button>
+            </div>
+
+            <div class="clicker-section">
+                <h1 id="score-display">0</h1>
+                
+                <div class="clickable-target" id="game-click-target">
+                    <img src="https://info-atlas.pl/favicon.png" alt="Click!">
+                </div>
+                
+                <p class="cps-text">
+                    <span data-lang="en">Income:</span>
+                    <span data-lang="pl">Zyskujesz:</span>
+                    <strong id="cps-display">0</strong> 
+                    <span data-lang="en">points/sec</span>
+                    <span data-lang="pl">punktów/sek</span>
+                </p>
+            </div>
+
+            <div class="shop-section">
+                <h3>
+                    <span data-lang="en">Upgrades Shop 🛒</span>
+                    <span data-lang="pl">Sklep z ulepszeniami 🛒</span>
+                </h3>
+                
+                <div class="shop-item" id="buy-click-power">
+                    <button>
+                        <span data-lang="en">Stronger Click (+1)</span>
+                        <span data-lang="pl">Silniejszy Klik (+1)</span>
+                        <br>
+                        <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-1-cost">10</span>
+                    </button>
+                    <div class="item-count">
+                        <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-1-count">0</span>
+                    </div>
+                </div>
+
+                <div class="shop-item" id="buy-auto-clicker">
+                    <button>
+                        <span data-lang="en">Auto-Clicker (+1/s)</span>
+                        <span data-lang="pl">Automatyczny Klikacz (+1/s)</span>
+                        <br>
+                        <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-2-cost">50</span>
+                    </button>
+                    <div class="item-count">
+                        <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-2-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="footer-divider">
+        <div class="game-footer">
+            <button id="game-lang-btn" class="mini-lang-btn">🌐 PL / EN</button>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
