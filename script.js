@@ -240,20 +240,26 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Klikanie w cel (Liska) - zabezpieczone transakcją
+    // Klikanie w cel (Liska) - Zmiana grafiki przy kliknięciu + efekt spłaszczenia
     const clickTarget = document.getElementById("game-click-target");
     if (clickTarget) {
         clickTarget.addEventListener("click", () => {
             if (!userRef) return;
             
-            // Bezpieczna inkrementacja klików
+            // Bezpieczna inkrementacja klików w bazie Firebase
             userRef.child("clicks").transaction((currentClicks) => {
                 return (currentClicks || 0) + playerData.clickPower;
             });
             
-            // Efekt squish (zgodny z czasem 0.12s w Twoim CSS)
+            // 1. Zmieniamy grafikę na liska po kliknięciu (otwarta buzia)
+            clickTarget.src = "image_8b6b04.jpg"; 
+            
+            // 2. Dodajemy klasę CSS spłaszczającą obrazek
             clickTarget.classList.add("squish-effect");
+            
+            // 3. Po 120ms wracamy do domyślnego liska i usuwamy efekt spłaszczenia
             setTimeout(() => {
+                clickTarget.src = "image_8b6ae9.jpg"; // Zdjęcie główne
                 clickTarget.classList.remove("squish-effect");
             }, 120);
         });
