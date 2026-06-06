@@ -18,7 +18,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: 16px;
     padding: 30px;
-    max-width: 440px;
+    max-width: 480px;      /* Zwiększone z 440px, żeby pomieścić większego lisa */
     width: 100%;
     text-align: center;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
@@ -123,12 +123,12 @@ body {
 }
 
 /* ==========================================================================
-   OBIEKT KLIKALNY I EFEKT SQUISH (POWIĘKSZONY LISEK)
+   OBIEKT KLIKALNY I EFEKT SQUISH (DUŻY LISEK - 280PX)
    ========================================================================== */
 .clickable-target {
-    width: 200px;        /* Zwiększone ze 140px na 200px */
-    height: 200px;       /* Zwiększone ze 140px na 200px */
-    margin: 20px auto;   /* Zbalansowany margines pod większy obiekt */
+    width: 280px;        /* Potężny lisek */
+    height: 280px;       /* Potężny lisek */
+    margin: 15px auto;   /* Zmniejszony margines, żeby zbalansować proporcje */
     cursor: pointer;
     user-select: none;
     display: flex;
@@ -146,7 +146,7 @@ body {
 }
 
 .squish-effect {
-    animation: squish 0.1s ease-in-out; /* Szybsza, bardziej responsywna animacja */
+    animation: squish 0.08s ease-in-out; /* Bardzo szybki klik dla efektu dynamiki */
 }
 
 @keyframes squish {
@@ -154,7 +154,7 @@ body {
         transform: scale(1);
     }
     30% {
-        transform: scaleY(0.8) scaleX(1.12); /* Proporcje dostosowane pod większy obiekt */
+        transform: scaleY(0.85) scaleX(1.1); /* Delikatniejsze spłaszczenie przy dużej skali */
     }
     100% {
         transform: scale(1);
