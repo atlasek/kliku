@@ -21,7 +21,9 @@ let currentLang = localStorage.getItem("currentLang") || localStorage.getItem("s
 let playerData = {
     clicks: 0,
     clickPower: 1,
-    autoClickers: 0
+    autoClickers: 0,
+    level: 1,
+    exp: 0
 };
 
 let userRef = null;
@@ -116,7 +118,6 @@ function showView(viewId) {
             loginView.style.display = "none";
             gameView.style.display = "block";
             
-            // TWARDA ŚCIEŻKA: ./ wymusza szukanie w tym samym folderze
             const clickTarget = document.getElementById("game-click-target");
             if (clickTarget) {
                 clickTarget.src = "./lisu1.png";
@@ -138,12 +139,17 @@ function setupGameSync() {
             playerData.clicks = data.clicks || 0;
             playerData.clickPower = data.clickPower || 1;
             playerData.autoClickers = data.autoClickers || 0;
+            playerData.level = data.level || 1;
+            playerData.exp = data.exp || 0;
             renderGameUI();
+            updateLevelUI();
         } else {
             userRef.update({
                 clicks: 0,
                 clickPower: 1,
-                autoClickers: 0
+                autoClickers: 0,
+                level: 1,
+                exp: 0
             });
         }
     });
@@ -231,11 +237,33 @@ document.addEventListener("DOMContentLoaded", () => {
         clickTarget.addEventListener("click", () => {
             if (!userRef) return;
             
+            // 1. Zapis punktów w Firebase
             userRef.child("clicks").transaction((currentClicks) => {
                 return (currentClicks || 0) + playerData.clickPower;
             });
+
+            // 2. Dodawanie doświadczenia (EXP) z synchronizacją z bazą danych
+            userRef.transaction((currentData) => {
+                if (currentData) {
+                    let level = currentData.level || 1;
+                    let exp = (currentData.exp || 0) + 1; // 1 klik = 1 EXP
+                    let required = Math.floor(100 * Math.pow(1.5, level - 1));
+
+                    if (exp >= required) {
+                        exp -= required;
+                        level++;
+                        // alert puszczamy poza transakcją lub zostawiamy tutaj, ale bezpieczniej asynchronicznie:
+                        setTimeout(() => {
+                            alert(currentLang === "pl" ? "AWANS! Osiągnąłeś poziom " + level + "!" : "LEVEL UP! You reached level " + level + "!");
+                        }, 50);
+                    }
+                    currentData.level = level;
+                    currentData.exp = exp;
+                }
+                return currentData;
+            });
             
-            // TWARDA ŚCIEŻKA: ./ wymusza szukanie w tym samym folderze
+            // Efekty graficzne klinięcia
             clickTarget.src = "./lisu2.png"; 
             clickTarget.classList.add("squish-effect");
             
@@ -296,45 +324,23 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ==========================================================================
-   SYSTEM POZIOMÓW I DOŚWIADCZENIA (DODATKOWA MECHANIKA)
-    ========================================================================== */
-let currentLevel = 1;
-let currentExp = 0;
-
-// Funkcja obliczająca wymagany exp dla danego poziomu
+   SYSTEM POZIOMÓW I DOŚWIADCZENIA
+   ========================================================================== */
 function getRequiredExp(level) {
     return Math.floor(100 * Math.pow(1.5, level - 1));
 }
 
-// 2. Tę funkcję wywołaj wewnątrz event listenera odpowiedzialnego za klikanie w lisa
-function addExperience() {
-    currentExp += 1; // Każde kliknięcie daje 1 EXP
-    
-    let requiredExp = getRequiredExp(currentLevel);
-    
-    // Sprawdzamy, czy gracz awansował
-    if (currentExp >= requiredExp) {
-        currentExp -= requiredExp; // Przenosimy nadmiarowy exp do nowego poziomu
-        currentLevel++;
-        
-        // Tutaj możesz dodać jakiś efekt dźwiękowy lub wizualny awansu!
-        alert("AWANS! Osiągnąłeś poziom " + currentLevel + "!"); 
-    }
-    
-    // Aktualizujemy wygląd paska i teksty na ekranie
-    updateLevelUI();
-}
-
-// 3. Funkcja odświeżająca widok na ekranie
 function updateLevelUI() {
-    let requiredExp = getRequiredExp(currentLevel);
-    let progressPercentage = (currentExp / requiredExp) * 100;
+    let requiredExp = getRequiredExp(playerData.level);
+    let progressPercentage = (playerData.exp / requiredExp) * 100;
     
-    document.getElementById("player-level").innerText = currentLevel;
-    document.getElementById("current-exp").innerText = currentExp;
-    document.getElementById("required-exp").innerText = requiredExp;
-    document.getElementById("progress-bar-fill").style.width = progressPercentage + "%";
-}
+    const lvlEl = document.getElementById("player-level");
+    const curExpEl = document.getElementById("current-exp");
+    const reqExpEl = document.getElementById("required-exp");
+    const barEl = document.getElementById("progress-bar-fill");
 
-// Wywołaj updateLevelUI() raz przy uruchomieniu gry, żeby zresetować widok
-updateLevelUI();
+    if (lvlEl) lvlEl.innerText = playerData.level;
+    if (curExpEl) curExpEl.innerText = playerData.exp;
+    if (reqExpEl) reqExpEl.innerText = requiredExp;
+    if (barEl) barEl.style.width = progressPercentage + "%";
+}
