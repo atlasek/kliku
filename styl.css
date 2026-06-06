@@ -18,7 +18,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: 16px;
     padding: 30px;
-    max-width: 480px;      /* Zwiększone z 440px, żeby pomieścić większego lisa */
+    max-width: 480px;      /* Szerokość idealnie dopasowana do dużego lisa */
     width: 100%;
     text-align: center;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
@@ -126,9 +126,9 @@ body {
    OBIEKT KLIKALNY I EFEKT SQUISH (DUŻY LISEK - 280PX)
    ========================================================================== */
 .clickable-target {
-    width: 280px;        /* Potężny lisek */
-    height: 280px;       /* Potężny lisek */
-    margin: 15px auto;   /* Zmniejszony margines, żeby zbalansować proporcje */
+    width: 280px;        
+    height: 280px;       
+    margin: 15px auto 30px auto; /* Zwiększony dolny margines dla lepszego odstępu od tekstu */
     cursor: pointer;
     user-select: none;
     display: flex;
@@ -143,10 +143,11 @@ body {
     display: block; 
     will-change: transform;
     transition: transform 0.05s ease;
+    filter: drop-shadow(0 4px 12px rgba(46, 204, 113, 0.15)); /* Subtelna zielona poświata wokół lisa */
 }
 
 .squish-effect {
-    animation: squish 0.08s ease-in-out; /* Bardzo szybki klik dla efektu dynamiki */
+    animation: squish 0.08s ease-in-out; 
 }
 
 @keyframes squish {
@@ -154,7 +155,7 @@ body {
         transform: scale(1);
     }
     30% {
-        transform: scaleY(0.85) scaleX(1.1); /* Delikatniejsze spłaszczenie przy dużej skali */
+        transform: scaleY(0.85) scaleX(1.1); 
     }
     100% {
         transform: scale(1);
@@ -171,12 +172,16 @@ body {
 .cps-text {
     color: #838e85;
     font-size: 14px;
+    margin-bottom: 10px;
 }
 
 #cps-display {
     color: #2ecc71;
 }
 
+/* ==========================================================================
+   SEKCJA SKLEPU Z ULEPSZENIAMI
+   ========================================================================== */
 .shop-section {
     margin-top: 30px;
     text-align: left;
@@ -205,17 +210,20 @@ body {
     background: #232d26;
     color: #ffffff;
     border: 1px solid #2f3d33;
-    padding: 8px 14px;
-    border-radius: 6px;
+    padding: 10px 16px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
     font-size: 13px;
     text-align: left;
     line-height: 1.4;
+    transition: background-color 0.15s, border-color 0.15s;
 }
 
 .shop-item button:hover {
-    background: #2f3d33;
+    background: #2ecc71; /* Przycisk zmienia kolor na zielony gry po najechaniu */
+    border-color: #27ae60;
+    color: #0b0f0c; /* Ciemny tekst na jasnym tle dla czytelności */
 }
 
 .item-count {
@@ -247,7 +255,277 @@ body {
 }
 
 /* ==========================================================================
-   MECHANIZM PRZEŁĄCZANIA JĘZYKÓW (ZOPTYMALIZOWANY)
+   MECHANIZM PRZEŁĄCZANIA JĘZYKÓW
+   ========================================================================== */
+
+[data-lang="pl"], [data-lang="en"] {
+    display: none !important;
+}
+
+body.lang-pl [data-lang="pl"] {
+    display: revert !important; 
+}
+
+body.lang-en [data-lang="en"] {
+    display: revert !important;
+}/* ==========================================================================
+   STYLIZACJA PODSTRONY ATLAS CLICKER
+   ========================================================================== */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0b0f0c; /* Bardzo ciemne tło strony */
+    color: #e3e8e4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.game-container {
+    background: #141a16; 
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 480px;      /* Szerokość idealnie dopasowana do dużego lisa */
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+.view-box h2 {
+    font-size: 24px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.view-box p {
+    color: #a2aba4;
+    font-size: 15px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.discord-btn {
+    background-color: #5865F2;
+    color: #ffffff;
+    border: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.discord-btn:hover {
+    background-color: #4752C4;
+}
+
+.discord-btn:active {
+    transform: scale(0.98);
+}
+
+.discord-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.safety-info {
+    margin-top: 30px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 18px;
+    font-size: 13.5px;
+    color: #929c94;
+    text-align: left;
+    border-left: 4px solid #5865F2;
+    line-height: 1.5;
+}
+
+.safety-info h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.15);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.logout-link {
+    background: transparent;
+    border: none;
+    color: #ff6b6b;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   OBIEKT KLIKALNY I EFEKT SQUISH (DUŻY LISEK - 280PX)
+   ========================================================================== */
+.clickable-target {
+    width: 280px;        
+    height: 280px;       
+    margin: 15px auto 30px auto; /* Zwiększony dolny margines dla lepszego odstępu od tekstu */
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.clickable-target img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block; 
+    will-change: transform;
+    transition: transform 0.05s ease;
+    filter: drop-shadow(0 4px 12px rgba(46, 204, 113, 0.15)); /* Subtelna zielona poświata wokół lisa */
+}
+
+.squish-effect {
+    animation: squish 0.08s ease-in-out; 
+}
+
+@keyframes squish {
+    0% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scaleY(0.85) scaleX(1.1); 
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+#score-display {
+    font-size: 42px;
+    margin: 10px 0;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.cps-text {
+    color: #838e85;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+#cps-display {
+    color: #2ecc71;
+}
+
+/* ==========================================================================
+   SEKCJA SKLEPU Z ULEPSZENIAMI
+   ========================================================================== */
+.shop-section {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.shop-section h3 {
+    font-size: 16px;
+    color: #ffffff;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.shop-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shop-item button {
+    background: #232d26;
+    color: #ffffff;
+    border: 1px solid #2f3d33;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    text-align: left;
+    line-height: 1.4;
+    transition: background-color 0.15s, border-color 0.15s;
+}
+
+.shop-item button:hover {
+    background: #2ecc71; /* Przycisk zmienia kolor na zielony gry po najechaniu */
+    border-color: #27ae60;
+    color: #0b0f0c; /* Ciemny tekst na jasnym tle dla czytelności */
+}
+
+.item-count {
+    font-size: 13px;
+    color: #838e85;
+}
+
+.footer-divider {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 25px 0 15px 0;
+}
+
+.mini-lang-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #a2aba4;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.mini-lang-btn:hover {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+/* ==========================================================================
+   MECHANIZM PRZEŁĄCZANIA JĘZYKÓW
    ========================================================================== */
 
 [data-lang="pl"], [data-lang="en"] {
