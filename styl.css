@@ -309,48 +309,49 @@ body.lang-en [data-lang="en"] {
     margin-top: 5px;
 }
 /* ==========================================================================
-   SYSTEM POWIADOMIEŃ 
+   SYSTEM POWIADOMIEŃ
    ========================================================================== */
 #notification-container {
     position: fixed;
-    top: 20px;
+    top: 25px; /* Delikatnie niżej od górnej krawędzi */
     left: 50%;
-    transform: translateX(-50%); /* Idealne wyśrodkowanie w poziomie */
+    transform: translateX(-50%);
     z-index: 9999;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 90%; /* Bezpieczna szerokość na telefonach */
-    max-width: 350px; /* Limit szerokości na komputerach */
-    pointer-events: none; /* Żeby powiadomienia nie blokowały klikania pod spodem */
+    width: 90%;
+    max-width: 340px;
+    pointer-events: none;
 }
 
 .toast {
-    background: #161a17; /* Ciemne tło pasujące do gry */
+    background: #151916;
     color: #ffffff;
-    padding: 14px 22px;
+    padding: 12px 20px;
     border-radius: 8px;
-    font-size: 15px; /* Nieco większa czcionka, żeby była czytelniejsza */
+    font-size: 14px;
     font-weight: 600;
-    text-align: center; /* Wyśrodkowany tekst w prostokącie */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7); /* Mocniejszy cień na PC */
-    border-top: 4px solid #3498db; /* Pasek na górze zamiast z boku lepiej wygląda na środku */
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    border-top: 4px solid #3498db;
+    /* Domyślna animacja pojawiania się z góry i znikania */
     animation: slideDown 0.3s ease-out forwards, fadeOut 0.5s ease-in 2.7s forwards;
 }
 
 /* Kolor dla awansu (Sukces) */
 .toast.success {
     border-top-color: #2ecc71;
-    box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+    box-shadow: 0 8px 20px rgba(46, 204, 113, 0.25);
 }
 
 /* Kolor dla braku punktów (Błąd) */
 .toast.error {
     border-top-color: #e74c3c;
-    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+    box-shadow: 0 8px 20px rgba(231, 76, 60, 0.25);
 }
 
-/* Animacja wsuwania z góry do dołu */
+/* Animacja wsuwania z góry */
 @keyframes slideDown {
     from {
         transform: translateY(-150%);
@@ -364,10 +365,13 @@ body.lang-en [data-lang="en"] {
 
 /* Animacja znikania */
 @keyframes fadeOut {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-    }
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Efekt potrząsania, gdy gracz klika bez punktów */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
 }
