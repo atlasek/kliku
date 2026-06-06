@@ -163,6 +163,7 @@ function setupGameSync() {
     }, 1000);
 }
 
+// Funkcja obliczająca koszt ulepszeń (wzór wykładniczy)
 function getUpgradeCost(baseCost, count) {
     return Math.floor(baseCost * Math.pow(1.15, count));
 }
@@ -206,6 +207,7 @@ function renderGameUI() {
 document.addEventListener("DOMContentLoaded", () => {
     checkDiscordAuth();
 
+    // Zmiana języka
     const langBtn = document.getElementById("game-lang-btn");
     if (langBtn) {
         langBtn.addEventListener("click", (e) => {
@@ -215,6 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Logowanie
     const loginBtn = document.getElementById("discord-login-btn");
     if (loginBtn) {
         loginBtn.addEventListener("click", () => {
@@ -222,6 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Wylogowanie
     const logoutBtn = document.getElementById("logout-btn");
     if (logoutBtn) {
         logoutBtn.addEventListener("click", () => {
@@ -231,7 +235,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Klikanie w cel (Liska) - Używamy "pointerdown" dla natychmiastowej reakcji i zmiany grafik na telefonach
+    // SYSTEM HUD: Obsługa przełączania zakładek menu (Nawigacja)
+    const navButtons = document.querySelectorAll(".nav-btn");
+    const gameTabs = document.querySelectorAll(".game-tab");
+
+    navButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const targetTabId = btn.getAttribute("data-target");
+
+            // 1. Zdejmij klasę 'active' ze wszystkich przycisków i ustaw na klikniętym
+            navButtons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            // 2. Schowaj wszystkie karty i aktywuj wybraną
+            gameTabs.forEach(tab => tab.classList.remove("active"));
+            const targetTab = document.getElementById(targetTabId);
+            if (targetTab) {
+                targetTab.classList.add("active");
+            }
+        });
+    });
+
+    // Klikanie w cel (Liska) - Używamy "pointerdown" dla natychmiastowej reakcji na telefonach
     const clickTarget = document.getElementById("game-click-target");
     if (clickTarget) {
         clickTarget.addEventListener("pointerdown", (e) => {
@@ -296,7 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     return currentData;
                 });
             } else {
-                // Poprawione powiadomienie uwzględniające nową walutę gry
                 showNotification(
                     currentLang === "pl" ? "Masz za mało głasknięć! ❌" : "Not enough pats! ❌", 
                     'error'
@@ -324,7 +348,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     return currentData;
                 });
             } else {
-                // Poprawione powiadomienie uwzględniające nową walutę gry
                 showNotification(
                     currentLang === "pl" ? "Masz za mało głasknięć! ❌" : "Not enough pats! ❌", 
                     'error'
