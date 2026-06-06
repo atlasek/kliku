@@ -231,10 +231,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Klikanie w cel (Liska)
+    // Klikanie w cel (Liska) - Używamy "pointerdown" dla natychmiastowej reakcji i zmiany grafik na telefonach
     const clickTarget = document.getElementById("game-click-target");
     if (clickTarget) {
-        clickTarget.addEventListener("click", () => {
+        clickTarget.addEventListener("pointerdown", (e) => {
             if (!userRef) return;
             
             // 1. Zapis punktów w Firebase
@@ -253,7 +253,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         exp -= required;
                         level++;
                         
-                        // NOWOŚĆ: Eleganckie powiadomienie o awansie zamiast okienka alert()
                         setTimeout(() => {
                             showNotification(
                                 currentLang === "pl" ? `AWANS! Osiągnąłeś poziom ${level}! 🎉` : `LEVEL UP! You reached level ${level}! 🎉`, 
@@ -267,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return currentData;
             });
             
-            // Efekty graficzne klinięcia
+            // Efekty graficzne kliknięcia (Działa natychmiastowo na Mobile i PC)
             clickTarget.src = "./lisu2.png"; 
             clickTarget.classList.add("squish-effect");
             
@@ -278,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // SKLEP: Kupowanie siły kliknięcia (Upgrade 1)
+    // SKLEP: Kupowanie siły kliknięcia (Moc Łapki / Paw Power)
     const buyClickPowerBtn = document.getElementById("buy-click-power");
     if (buyClickPowerBtn) {
         buyClickPowerBtn.addEventListener("click", () => {
@@ -297,16 +296,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     return currentData;
                 });
             } else {
-                // NOWOŚĆ: Powiadomienie o braku punktów typu 'error'
+                // Poprawione powiadomienie uwzględniające nową walutę gry
                 showNotification(
-                    currentLang === "pl" ? "Masz za mało punktów! ❌" : "Not enough points! ❌", 
+                    currentLang === "pl" ? "Masz za mało głasknięć! ❌" : "Not enough pats! ❌", 
                     'error'
                 );
             }
         });
     }
 
-    // SKLEP: Kupowanie Auto-Clickera (Upgrade 2)
+    // SKLEP: Kupowanie Auto-Clickera (Automatyczne Głaskanie / Auto Patting)
     const buyAutoClickerBtn = document.getElementById("buy-auto-clicker");
     if (buyAutoClickerBtn) {
         buyAutoClickerBtn.addEventListener("click", () => {
@@ -325,9 +324,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     return currentData;
                 });
             } else {
-                // NOWOŚĆ: Powiadomienie o braku punktów typu 'error'
+                // Poprawione powiadomienie uwzględniające nową walutę gry
                 showNotification(
-                    currentLang === "pl" ? "Masz za mało punktów! ❌" : "Not enough points! ❌", 
+                    currentLang === "pl" ? "Masz za mało głasknięć! ❌" : "Not enough pats! ❌", 
                     'error'
                 );
             }
@@ -358,25 +357,24 @@ function updateLevelUI() {
 }
 
 /* ==========================================================================
-   SYSTEM POWIADOMIEŃ 
+   SYSTEM POWIADOMIEŃ (Z BLOKADĄ SPAMU I RESETEM ANIMACJI)
    ========================================================================== */
 function showNotification(message, type = 'success') {
     const container = document.getElementById("notification-container");
     if (!container) return;
 
-    // Jeśli to jest błąd (np. brak punktów), sprawdzamy czy taki błąd już się wyświetla
+    // Jeśli to jest błąd (brak głasknięć), odświeżamy istniejący komunikat
     if (type === 'error') {
         const existingError = container.querySelector(".toast.error");
         if (existingError) {
-            // Aktualizujemy treść (na wypadek zmiany języka)
             existingError.innerText = message;
             
-            // Resetujemy animację potrząśnięcia, żeby gracz zauważył kliknięcie
+            // Wymuszenie restartu animacji potrząśnięcia (shake)
             existingError.style.animation = 'none';
-            existingError.offsetHeight; // Trik wymuszający restart animacji w przeglądarce
+            existingError.offsetHeight; 
             existingError.style.animation = 'shake 0.3s ease-in-out, fadeOut 0.5s ease-in 2.7s forwards';
             
-            // Czyścimy stary licznik usuwania i ustawiamy nowy od nowa
+            // Odnowienie licznika zniknięcia
             if (existingError.dataset.timeoutId) {
                 clearTimeout(Number(existingError.dataset.timeoutId));
             }
@@ -385,11 +383,11 @@ function showNotification(message, type = 'success') {
             }, 3200);
             existingError.dataset.timeoutId = newTimeout;
             
-            return; // Kończymy funkcję, nie tworzymy nowego prostokąta!
+            return; 
         }
     }
 
-    // Tworzymy mały prostokąt (dla awansu lub pierwszego błędu)
+    // Tworzenie nowego powiadomienia (dla awansów lub pierwszego błędu)
     const toast = document.createElement("div");
     toast.className = `toast ${type}`;
     toast.innerText = message;
@@ -400,6 +398,5 @@ function showNotification(message, type = 'success') {
         toast.remove();
     }, 3200);
     
-    // Zapisujemy ID timera w elemencie, żeby móc go wyczyścić przy odświeżaniu błędu
     toast.dataset.timeoutId = timeoutId;
 }
