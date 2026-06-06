@@ -364,16 +364,42 @@ function showNotification(message, type = 'success') {
     const container = document.getElementById("notification-container");
     if (!container) return;
 
-    // Tworzymy mały prostokąt
+    // Jeśli to jest błąd (np. brak punktów), sprawdzamy czy taki błąd już się wyświetla
+    if (type === 'error') {
+        const existingError = container.querySelector(".toast.error");
+        if (existingError) {
+            // Aktualizujemy treść (na wypadek zmiany języka)
+            existingError.innerText = message;
+            
+            // Resetujemy animację potrząśnięcia, żeby gracz zauważył kliknięcie
+            existingError.style.animation = 'none';
+            existingError.offsetHeight; // Trik wymuszający restart animacji w przeglądarce
+            existingError.style.animation = 'shake 0.3s ease-in-out, fadeOut 0.5s ease-in 2.7s forwards';
+            
+            // Czyścimy stary licznik usuwania i ustawiamy nowy od nowa
+            if (existingError.dataset.timeoutId) {
+                clearTimeout(Number(existingError.dataset.timeoutId));
+            }
+            const newTimeout = setTimeout(() => {
+                existingError.remove();
+            }, 3200);
+            existingError.dataset.timeoutId = newTimeout;
+            
+            return; // Kończymy funkcję, nie tworzymy nowego prostokąta!
+        }
+    }
+
+    // Tworzymy mały prostokąt (dla awansu lub pierwszego błędu)
     const toast = document.createElement("div");
     toast.className = `toast ${type}`;
     toast.innerText = message;
 
-    // Dodajemy go do kontenera na ekranie
     container.appendChild(toast);
 
-    // Po 3.2 sekundy usuwamy go całkowicie z kodu HTML
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
         toast.remove();
     }, 3200);
+    
+    // Zapisujemy ID timera w elemencie, żeby móc go wyczyścić przy odświeżaniu błędu
+    toast.dataset.timeoutId = timeoutId;
 }
