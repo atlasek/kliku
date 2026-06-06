@@ -252,9 +252,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (exp >= required) {
                         exp -= required;
                         level++;
-                        // alert puszczamy poza transakcją lub zostawiamy tutaj, ale bezpieczniej asynchronicznie:
+                        
+                        // NOWOŚĆ: Eleganckie powiadomienie o awansie zamiast okienka alert()
                         setTimeout(() => {
-                            alert(currentLang === "pl" ? "AWANS! Osiągnąłeś poziom " + level + "!" : "LEVEL UP! You reached level " + level + "!");
+                            showNotification(
+                                currentLang === "pl" ? `AWANS! Osiągnąłeś poziom ${level}! 🎉` : `LEVEL UP! You reached level ${level}! 🎉`, 
+                                'success'
+                            );
                         }, 50);
                     }
                     currentData.level = level;
@@ -293,7 +297,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     return currentData;
                 });
             } else {
-                alert(currentLang === "pl" ? "Masz za mało punktów!" : "Not enough points!");
+                // NOWOŚĆ: Powiadomienie o braku punktów typu 'error'
+                showNotification(
+                    currentLang === "pl" ? "Masz za mało punktów! ❌" : "Not enough points! ❌", 
+                    'error'
+                );
             }
         });
     }
@@ -317,7 +325,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     return currentData;
                 });
             } else {
-                alert(currentLang === "pl" ? "Masz za mało punktów!" : "Not enough points!");
+                // NOWOŚĆ: Powiadomienie o braku punktów typu 'error'
+                showNotification(
+                    currentLang === "pl" ? "Masz za mało punktów! ❌" : "Not enough points! ❌", 
+                    'error'
+                );
             }
         });
     }
@@ -343,4 +355,25 @@ function updateLevelUI() {
     if (curExpEl) curExpEl.innerText = playerData.exp;
     if (reqExpEl) reqExpEl.innerText = requiredExp;
     if (barEl) barEl.style.width = progressPercentage + "%";
+}
+
+/* ==========================================================================
+   SYSTEM POWIADOMIEŃ 
+   ========================================================================== */
+function showNotification(message, type = 'success') {
+    const container = document.getElementById("notification-container");
+    if (!container) return;
+
+    // Tworzymy mały prostokąt
+    const toast = document.createElement("div");
+    toast.className = `toast ${type}`;
+    toast.innerText = message;
+
+    // Dodajemy go do kontenera na ekranie
+    container.appendChild(toast);
+
+    // Po 3.2 sekundy usuwamy go całkowicie z kodu HTML
+    setTimeout(() => {
+        toast.remove();
+    }, 3200);
 }
