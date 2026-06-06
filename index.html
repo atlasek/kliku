@@ -51,65 +51,106 @@
                 </button>
             </div>
 
-            <div class="clicker-section">
-                <h1 id="score-display">0</h1>
+            <div class="game-content-layout">
                 
-                <div class="level-section">
-                    <div class="level-text">
-                        <span data-lang="pl">Poziom:</span>
-                        <span data-lang="en">Level:</span> 
-                        <strong id="player-level">1</strong>
-                    </div>
-                    <div class="progress-bar-container">
-                        <div id="progress-bar-fill"></div>
-                    </div>
-                    <div class="exp-text">
-                        <span id="current-exp">0</span> / <span id="required-exp">100</span> EXP
-                    </div>
-                </div>
-                
-                <div class="clickable-target">
-                    <img id="game-click-target" src="./lisu1.png" alt="Click!">
-                </div>
-                
-                <p class="cps-text">
-                    <span data-lang="en">Income:</span>
-                    <span data-lang="pl">Zyskujesz:</span>
-                    <strong id="cps-display">0</strong> 
-                    <span data-lang="en">pats/sec</span>
-                    <span data-lang="pl">głasknięć/sek</span>
-                </p>
-            </div>
-
-            <div class="shop-section">
-                <h3>
-                    <span data-lang="en">Upgrades Shop 🛒</span>
-                    <span data-lang="pl">Sklep z ulepszeniami 🛒</span>
-                </h3>
-                
-                <div class="shop-item" id="buy-click-power">
-                    <button>
-                        <span data-lang="en">Paw Power (+1)</span>
-                        <span data-lang="pl">Moc Łapki (+1)</span>
-                        <br>
-                        <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-1-cost">10</span>
-                    </button>
-                    <div class="item-count">
-                        <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-1-count">0</span>
+                <div id="tab-clicker" class="game-tab active">
+                    <div class="clicker-section">
+                        <h1 id="score-display">0</h1>
+                        
+                        <div class="level-section">
+                            <div class="level-text">
+                                <span data-lang="pl">Poziom:</span>
+                                <span data-lang="en">Level:</span> 
+                                <strong id="player-level">1</strong>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div id="progress-bar-fill"></div>
+                            </div>
+                            <div class="exp-text">
+                                <span id="current-exp">0</span> / <span id="required-exp">100</span> EXP
+                            </div>
+                        </div>
+                        
+                        <div class="clickable-target">
+                            <img id="game-click-target" src="./lisu1.png" alt="Click!">
+                        </div>
+                        
+                        <p class="cps-text">
+                            <span data-lang="en">Income:</span>
+                            <span data-lang="pl">Zyskujesz:</span>
+                            <strong id="cps-display">0</strong> 
+                            <span data-lang="en">pats/sec</span>
+                            <span data-lang="pl">głasknięć/sek</span>
+                        </p>
                     </div>
                 </div>
 
-                <div class="shop-item" id="buy-auto-clicker">
-                    <button>
-                        <span data-lang="en">Auto Patting (+1/s)</span>
-                        <span data-lang="pl">Automatyczne Głaskanie (+1/s)</span>
-                        <br>
-                        <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-2-cost">50</span>
-                    </button>
-                    <div class="item-count">
-                        <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-2-count">0</span>
+                <div id="tab-shop" class="game-tab">
+                    <div class="shop-section">
+                        <h3>
+                            <span data-lang="en">Upgrades Shop 🛒</span>
+                            <span data-lang="pl">Sklep z ulepszeniami 🛒</span>
+                        </h3>
+                        
+                        <div class="shop-item" id="buy-click-power">
+                            <button>
+                                <span data-lang="en">Paw Power (+1)</span>
+                                <span data-lang="pl">Moc Łapki (+1)</span>
+                                <br>
+                                <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-1-cost">10</span>
+                            </button>
+                            <div class="item-count">
+                                <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-1-count">0</span>
+                            </div>
+                        </div>
+
+                        <div class="shop-item" id="buy-auto-clicker">
+                            <button>
+                                <span data-lang="en">Auto Patting (+1/s)</span>
+                                <span data-lang="pl">Automatyczne Głaskanie (+1/s)</span>
+                                <br>
+                                <span data-lang="en">Cost:</span><span data-lang="pl">Koszt:</span> <span id="upgrade-2-cost">50</span>
+                            </button>
+                            <div class="item-count">
+                                <span data-lang="en">Owned:</span><span data-lang="pl">Posiadasz:</span> <span id="upgrade-2-count">0</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <div id="tab-leaderboard" class="game-tab">
+                    <div class="leaderboard-section">
+                        <h3>
+                            <span data-lang="en">Leaderboard 🏆</span>
+                            <span data-lang="pl">Tabela Wyników 🏆</span>
+                        </h3>
+                        <p style="opacity: 0.6; text-align: center; margin-top: 32px;">
+                            <span data-lang="en">Coming soon...</span>
+                            <span data-lang="pl">Wkrótce dostępne...</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div id="tab-achievements" class="game-tab">
+                    <div class="achievements-section">
+                        <h3>
+                            <span data-lang="en">Achievements ⭐</span>
+                            <span data-lang="pl">Osiągnięcia ⭐</span>
+                        </h3>
+                        <p style="opacity: 0.6; text-align: center; margin-top: 32px;">
+                            <span data-lang="en">Coming soon...</span>
+                            <span data-lang="pl">Wkrótce dostępne...</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="game-navigation">
+                    <button class="nav-btn active" data-target="tab-clicker" title="Głaskanie">🐾</button>
+                    <button class="nav-btn" data-target="tab-shop" title="Sklep">🛒</button>
+                    <button class="nav-btn" data-target="tab-leaderboard" title="Ranking">🏆</button>
+                    <button class="nav-btn" data-target="tab-achievements" title="Osiągnięcia">⭐</button>
+                </div>
+
             </div>
         </div>
 
