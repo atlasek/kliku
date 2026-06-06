@@ -294,3 +294,47 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+/* ==========================================================================
+   SYSTEM POZIOMÓW I DOŚWIADCZENIA (DODATKOWA MECHANIKA)
+    ========================================================================== */
+let currentLevel = 1;
+let currentExp = 0;
+
+// Funkcja obliczająca wymagany exp dla danego poziomu
+function getRequiredExp(level) {
+    return Math.floor(100 * Math.pow(1.5, level - 1));
+}
+
+// 2. Tę funkcję wywołaj wewnątrz event listenera odpowiedzialnego za klikanie w lisa
+function addExperience() {
+    currentExp += 1; // Każde kliknięcie daje 1 EXP
+    
+    let requiredExp = getRequiredExp(currentLevel);
+    
+    // Sprawdzamy, czy gracz awansował
+    if (currentExp >= requiredExp) {
+        currentExp -= requiredExp; // Przenosimy nadmiarowy exp do nowego poziomu
+        currentLevel++;
+        
+        // Tutaj możesz dodać jakiś efekt dźwiękowy lub wizualny awansu!
+        alert("AWANS! Osiągnąłeś poziom " + currentLevel + "!"); 
+    }
+    
+    // Aktualizujemy wygląd paska i teksty na ekranie
+    updateLevelUI();
+}
+
+// 3. Funkcja odświeżająca widok na ekranie
+function updateLevelUI() {
+    let requiredExp = getRequiredExp(currentLevel);
+    let progressPercentage = (currentExp / requiredExp) * 100;
+    
+    document.getElementById("player-level").innerText = currentLevel;
+    document.getElementById("current-exp").innerText = currentExp;
+    document.getElementById("required-exp").innerText = requiredExp;
+    document.getElementById("progress-bar-fill").style.width = progressPercentage + "%";
+}
+
+// Wywołaj updateLevelUI() raz przy uruchomieniu gry, żeby zresetować widok
+updateLevelUI();
