@@ -382,3 +382,136 @@ body.lang-en [data-lang="en"] {
     20%, 60% { transform: translateX(-6px); }
     40%, 80% { transform: translateX(6px); }
 }
+
+/* ==========================================================================
+   SYSTEM ZAKŁADEK I MENU NAWIGACYJNEGO (HUD)
+   ========================================================================== */
+
+/* Układ gry wspierający menu boczne */
+.game-content-layout {
+    position: relative;
+    display: flex;
+    width: 100%;
+}
+
+/* Domyślnie ukrywamy karty gier */
+.game-tab {
+    display: none;
+    width: 100%;
+    animation: fadeInTab 0.25s ease-out forwards;
+}
+
+/* Karta aktywna staje się widoczna */
+.game-tab.active {
+    display: block;
+}
+
+/* Styl kontenera menu (Dla PC: po prawej stronie) */
+.game-navigation {
+    position: absolute;
+    right: -75px; /* Wyrzucenie menu delikatnie poza główny boks na PC */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: rgba(22, 26, 23, 0.85);
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+}
+
+/* Przyciski w menu */
+.nav-btn {
+    background: #1e2520;
+    border: 2px solid transparent;
+    font-size: 22px;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-btn:hover {
+    background: #2d3830;
+    transform: scale(1.05);
+}
+
+/* Aktywny przycisk menu */
+.nav-btn.active {
+    background: #2ecc71; /* Zielony akcent pasujący do sukcesu */
+    border-color: #ffffff;
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.5);
+    transform: scale(1.1);
+}
+
+/* Zapobieganie zaznaczaniu tekstu i ramkom na telefonie */
+#game-click-target {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-drag: none;
+    outline: none;
+}
+
+/* ANIMACJA PŁYNNEGO POJAWIANIA SIĘ KARTY */
+@keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   RESPONSYWNOŚĆ: ADAPTACJA DLA TELEFONÓW (WIDOK MOBILNY)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .game-content-layout {
+        flex-direction: column;
+        padding-bottom: 70px; /* Miejsce na dolne menu, by nic nie zasłaniało */
+    }
+
+    .game-navigation {
+        position: fixed;
+        bottom: 15px;
+        left: 50%;
+        right: auto;
+        top: auto;
+        transform: translateX(-50%); /* Wyśrodkowanie na dole ekranu */
+        flex-direction: row; /* Zmiana z pionu na poziom */
+        gap: 16px;
+        width: 90%;
+        max-width: 320px;
+        justify-content: center;
+        z-index: 999;
+    }
+    
+    .nav-btn {
+        width: 55px;
+        height: 55px; /* Nieco większe przyciski dla wygodniejszego klikania palcem */
+        font-size: 24px;
+    }
+}
+/* ==========================================================================
+   SYSTEM ZAKŁADEK (TABS)
+   ========================================================================== */
+
+/* Domyślnie ukrywamy wszystkie zakładki w grze */
+.game-tab {
+    display: none !important;
+}
+
+/* Pokazujemy wyłącznie tę zakładkę, która posiada klasę .active */
+.game-tab.active {
+    display: block !important; /* Możesz zmienić na 'flex', jeśli Twój styl klikacza tego wymaga */
+}
+
+/* Opcjonalne wyczyszczenie marginesów podziału treści */
+.game-content-layout {
+    position: relative;
+    width: 100%;
+}
