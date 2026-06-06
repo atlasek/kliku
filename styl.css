@@ -179,6 +179,13 @@ body {
     color: #2ecc71;
 }
 
+#game-click-target {
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-drag: none;
+    outline: none;
+}
+
 /* ==========================================================================
    SEKCJA SKLEPU Z ULEPSZENIAMI
    ========================================================================== */
